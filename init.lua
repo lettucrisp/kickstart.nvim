@@ -1,5 +1,4 @@
 --[[
-
 =====================================================================
 ==================== READ THIS BEFORE CONTINUING ====================
 =====================================================================
@@ -154,8 +153,12 @@ require('lazy').setup({
     -- Theme inspired by Atom
     'navarasu/onedark.nvim',
     priority = 1000,
+  },
+
+  {
+    'sainnhe/everforest',
     config = function()
-      vim.cmd.colorscheme 'onedark'
+      vim.cmd.colorscheme 'everforest'
     end,
   },
 
@@ -166,7 +169,7 @@ require('lazy').setup({
     opts = {
       options = {
         icons_enabled = false,
-        theme = 'onedark',
+        theme = 'everforest',
         component_separators = '|',
         section_separators = '',
       },
@@ -215,6 +218,36 @@ require('lazy').setup({
     build = ':TSUpdate',
   },
 
+  {
+    'nvim-tree/nvim-web-devicons',
+  },
+
+  {
+    'romgrk/barbar.nvim',
+    dependencies = {
+      'nvim-tree/nvim-web-devicons', -- OPTIONAL: for file icons
+    },
+    init = function() vim.g.barbar_auto_setup = false end,
+    opts = {
+      -- lazy.nvim will automatically call setup for you. put your options here, anything missing will use the default:
+      -- animation = true,
+      -- insert_at_start = true,
+      -- …etc.
+    },
+
+    {
+      'lambdalisue/fern.vim',
+    }
+  },
+
+  {
+    'smoka7/hop.nvim',
+    version = '*',
+    opts = {},
+  },
+
+  { 'sitiom/nvim-numbertoggle' },
+
   -- NOTE: Next Step on Your Neovim Journey: Add/Configure additional "plugins" for kickstart
   --       These are some example plugins that I've included in the kickstart repository.
   --       Uncomment any of the lines below to enable them.
@@ -239,6 +272,7 @@ vim.o.hlsearch = false
 
 -- Make line numbers default
 vim.wo.number = true
+vim.wo.relativenumber = true
 
 -- Enable mouse mode
 vim.o.mouse = 'a'
@@ -251,8 +285,13 @@ vim.o.clipboard = 'unnamedplus'
 -- Enable break indent
 vim.o.breakindent = true
 
--- Save undo history
-vim.o.undofile = true
+vim.o.list = true
+vim.o.cursorline = true
+vim.o.smartindent = true
+vim.o.expandtab = true
+
+vim.o.backup = false
+vim.o.undofile = false
 
 -- Case-insensitive searching UNLESS \C or capital in search
 vim.o.ignorecase = true
@@ -273,9 +312,37 @@ vim.o.termguicolors = true
 
 -- [[ Basic Keymaps ]]
 
+vim.keymap.set({ 'n', 'v' }, ':', ';', { silent = true })
+vim.keymap.set({ 'n', 'v' }, ';', ':', { silent = true })
+
+-- Keymaps for separation
+vim.keymap.set({ 'n' }, 's', '<Nop>', { silent = true})
+vim.keymap.set({ 'n' }, 'sr', ':<C-u>sp<CR>', { silent = true })
+vim.keymap.set({ 'n' }, 'sc', ':<C-u>vs<CR>', { silent = true })
+vim.keymap.set({ 'n' }, 'sw', '<C-w>k', { silent = true })
+vim.keymap.set({ 'n' }, 'ss', '<C-w>j', { silent = true })
+vim.keymap.set({ 'n' }, 'sd', '<C-w>l', { silent = true })
+vim.keymap.set({ 'n' }, 'sa', '<C-w>h', { silent = true })
+vim.keymap.set({ 'n' }, 'sq', ':<C-u>q<CR>', { silent = true })
+
+vim.keymap.set({ 'n', 'v' }, '<Tab>', '%', { silent = true })
+
+-- Keymaps for tabs
+vim.keymap.set({ 'n' }, '-', ':BufferPrevious<CR>', { silent = true })
+vim.keymap.set({ 'n' }, '=', ':BufferNext<CR>', { silent = true })
+
+vim.keymap.set({ 'n' }, 'n', 'nzz', { silent = true })
+vim.keymap.set({ 'n' }, 'N', 'Nzz', { silent = true })
+vim.keymap.set({ 'n' }, '*', '*zz', { silent = true })
+vim.keymap.set({ 'n' }, '#', '#zz', { silent = true })
+vim.keymap.set({ 'n' }, 'g*', 'g*zz', { silent = true })
+vim.keymap.set({ 'n' }, 'g#', 'g#zz', { silent = true })
+
 -- Keymaps for better default experience
 -- See `:help vim.keymap.set()`
 vim.keymap.set({ 'n', 'v' }, '<Space>', '<Nop>', { silent = true })
+
+vim.keymap.set({ 'n' }, '<Leader>f', ':Fern . -reveal=% -drawer -toggle<CR>', { silent = true })
 
 -- Remap for dealing with word wrap
 vim.keymap.set('n', 'k', "v:count == 0 ? 'gk' : 'k'", { expr = true, silent = true })
@@ -395,6 +462,12 @@ vim.defer_fn(function()
     },
   }
 end, 0)
+
+-- Hop keymaps
+local hop = require('hop')
+vim.keymap.set({ 'n' }, 't', function()
+  hop.hint_words({})
+end, { remap = true })
 
 -- Diagnostic keymaps
 vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, { desc = 'Go to previous diagnostic message' })
