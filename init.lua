@@ -248,6 +248,12 @@ require('lazy').setup({
 
   { 'sitiom/nvim-numbertoggle' },
 
+  {
+    'wfxr/minimap.vim',
+    init = function() vim.g.minimap_auto_start = 1 end,
+  },
+
+
   -- NOTE: Next Step on Your Neovim Journey: Add/Configure additional "plugins" for kickstart
   --       These are some example plugins that I've included in the kickstart repository.
   --       Uncomment any of the lines below to enable them.
@@ -337,6 +343,9 @@ vim.keymap.set({ 'n' }, '*', '*zz', { silent = true })
 vim.keymap.set({ 'n' }, '#', '#zz', { silent = true })
 vim.keymap.set({ 'n' }, 'g*', 'g*zz', { silent = true })
 vim.keymap.set({ 'n' }, 'g#', 'g#zz', { silent = true })
+
+vim.keymap.set({ 'v' }, '>', '>gv', { silent = true })
+vim.keymap.set({ 'v' }, '<', '<gv', { silent = true })
 
 -- Keymaps for better default experience
 -- See `:help vim.keymap.set()`
